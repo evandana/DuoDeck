@@ -5,20 +5,31 @@ import java.util.Date;
 
 
 public class CustomDate extends Date {
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	private SimpleDateFormat dateFormatFull = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	private SimpleDateFormat dateFormatYMD = new SimpleDateFormat("yyyy/MM/dd");
+	private SimpleDateFormat dateFormatTimeOfDay = new SimpleDateFormat("HH:mm:ss");
 	
-	public String getCurrentDateAsString() 
+	public CustomDate getCurrentDateAsCustomDate() 
 	{
-		return dateFormat.format(new Date());
+		return new CustomDate();
 	}
 	
-	public Date getDateObjFromString(String dateString) throws java.text.ParseException
-	{
-		return dateFormat.parse(dateString);
-		
+	public String convertDateToStringFull() {
+		return dateFormatFull.format(this);
+	}
+	public String convertDateToStringYMD() {
+		return dateFormatYMD.format(this);
+	}
+	public String convertDateToStringTimeOfDay() {
+		return dateFormatTimeOfDay.format(this);
 	}
 	
-	public Date getEarlierDate(Date otherDate) 
+	public CustomDate getDateObjFromString(String dateString) throws java.text.ParseException
+	{
+		return (CustomDate) dateFormatFull.parse(dateString);
+	}
+	
+	public CustomDate getEarlierDate(CustomDate otherDate) 
 	{
 		if (this.before(otherDate))
 		{
@@ -28,7 +39,7 @@ public class CustomDate extends Date {
 		}
 	}
 	
-	public Date getLaterDate(Date otherDate) 
+	public CustomDate getLaterDate(CustomDate otherDate) 
 	{
 		if (this.after(otherDate))
 		{

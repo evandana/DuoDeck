@@ -37,8 +37,8 @@ public class PersistentStorage {
     	String s = "";
     	String sp = " "; String cm = ","; String cl = ":";
     	
-    	s+= "dateStarted:" + stats.dateStarted + sp;
-    	s+= "timeOfDayStarted:" + stats.timeOfDayStarted + sp;
+    	s+= "dateStarted:" + stats.dateStarted.convertDateToStringYMD() + sp;
+    	s+= "timeOfDayStarted:" + stats.dateStarted.convertDateToStringTimeOfDay() + sp;
     	s+= "deckName:" + deck.name + sp;
     	s+= "duration:" + stats.duration + sp;
     	s+= "pushups:" + deck.pushups.toString() + cm;
