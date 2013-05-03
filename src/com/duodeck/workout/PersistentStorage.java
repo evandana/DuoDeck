@@ -12,24 +12,10 @@ public class PersistentStorage {
 	// TODO: add in decks 2 and 3
 	//	  public static final String STORAGE_STATS_DECK2 = "StatsDeck2";	
 	//    public static final String STORAGE_STATS_DECK3 = "StatsDeck3";
-	// temp keys
-	//    public static final String KEY_TEMP_SESSION_START_TIMESTAMP = "SessionStartTimestamp"; // allows us to calibrate in the case of interruptions
-	//    public static final String KEY_TEMP_SESSION_START_TIMER_VALUE = "SessionStartTimerValue"; // allows us to calibrate in the case of interruptions
-    // keys to use per deck
 
-    // keys to use for summing counts per exercise
-    // TODO: map suits to exercise
-	//    public static final String KEY_SUM_VALUE_SPADES = "SumValueSpades";
-	//    public static final String KEY_SUM_VALUE_HEARTS = "SumValueHearts";
-	//    public static final String KEY_SUM_VALUE_DIAMONDS = "SumValueDiamonds";
-	//    public static final String KEY_SUM_VALUE_CLUBSS = "SumValueClubs";
-    // TODO: track time per suit
-	//    public static final String KEY_SUM_VALUE_SPADES = "SumValueSpades";
-	//    public static final String KEY_SUM_VALUE_HEARTS = "SumValueHearts";
-	//    public static final String KEY_SUM_VALUE_DIAMONDS = "SumValueDiamonds";
-	//    public static final String KEY_SUM_VALUE_CLUBSS = "SumValueClubs";
     
-    // dateStarted:yyyy-mm-dd timeOfDayStarted:hh:mm deckName:string duration:hh:mm s:count,duration h:count,duration d:count,duration c:count,duration map:s=exercise,h=exercise,d=exercise,c=exercise"
+    // string format (rough idea)
+	// dateStarted:yyyy-mm-dd timeOfDayStarted:hh:mm deckName:string duration:hh:mm s:count,duration h:count,duration d:count,duration c:count,duration map:s=exercise,h=exercise,d=exercise,c=exercise"
     public String makeWorkoutStringForStorage(Deck deck) 
     {
     	TrackStatsWhilePlaying stats = deck.inGameStats;

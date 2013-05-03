@@ -12,9 +12,9 @@ public class CustomDate extends Date {
 	private static final String nullDateString = "0:00";
 	private static CustomDate nullDate;
 
-	private SimpleDateFormat dateFormatFull = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	private SimpleDateFormat dateFormatFull = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
 	private SimpleDateFormat dateFormatYMD = new SimpleDateFormat("yyyy/MM/dd");
-	private SimpleDateFormat dateFormatTimeOfDay = new SimpleDateFormat("HH:mm:ss");
+	private SimpleDateFormat dateFormatTimeOfDay = new SimpleDateFormat("kk:mm:ss");
 
 	public CustomDate getCurrentDateAsCustomDate() 
 	{
