@@ -52,7 +52,9 @@ public class TrackStatsWhilePlaying {
 		@Override
 		public String toString() // "0,0:00"
 		{
-			return (this.sumCount + "," + this.sumDuration).toString();
+			// TODO: show duration for situps
+			//			return (this.sumCount + "," + this.sumDuration).toString();
+			return (this.sumCount + "").toString();
 		}
 	}
 

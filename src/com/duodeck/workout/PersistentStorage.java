@@ -34,20 +34,18 @@ public class PersistentStorage {
     {
     	TrackStatsWhilePlaying stats = deck.inGameStats;
     	
-    	String s = "";
+    	String s = ""; String br = "\n";
     	String sp = " "; String cm = ","; String cl = ":";
     	
-    	s+= "dateStarted:" + stats.dateStarted.convertDateToStringYMD() + sp;
-    	s+= "timeOfDayStarted:" + stats.dateStarted.convertDateToStringTimeOfDay() + sp;
-    	s+= "deckName:" + deck.name + sp;
-    	s+= "duration:" + stats.duration + sp;
-    	s+= "pushups:" + deck.pushups.toString() + cm;
-    	s+= "situps:" + deck.situps.toString() + sp;
+    	s+= "dateStarted: " + stats.dateStarted.convertDateToStringYMD() + sp + br;
+    	s+= "timeOfDayStarted: " + stats.dateStarted.convertDateToStringTimeOfDay() + sp + br;
+    	s+= "deckName: " + deck.name + sp + br;
+    	s+= "duration: " + stats.duration + sp + br;
+    	s+= "pushups: " + deck.pushups.toString() + sp + br;
+    	s+= "situps: " + deck.situps.toString() + sp + br;
     	
     	return s;
     }
-    
-    
     
     
     public void saveWorkoutDataToSharedPrefs(Context context, StatKeys key, String data) 
@@ -120,46 +118,68 @@ public class PersistentStorage {
 		for (int i=0; i<StatKeys.values().length; i++)
 		{
 			StatKeys key = StatKeys.values()[i];
-			String fromStorage = "";
-			String data; // from current deck
+			String storageWorkoutAsString = "";
+			String currentWorkoutAsString = makeWorkoutStringForStorage(deck); // from current deck
 			int val;
 			switch (key) 
 			{
+				/*
+				 * Basic format:
+				 * for each stat:
+				 * pull the appropriate workoutString for that stat
+				 * do necessary comparisons
+				 * save the "[fast]-est" time as a string in sharedPrefs
+				 */
 				case DecksCompleted:
-					fromStorage = "0" + context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.DecksCompleted.toString(), "");
-					val = Integer.parseInt(fromStorage) + 1;
+					storageWorkoutAsString = "0" + context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.DecksCompleted.toString(), "");
+					val = Integer.parseInt(storageWorkoutAsString) + 1;
 					context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), val + "").commit();
 					break;
 				case FirstDeck:
-					fromStorage = context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.FirstDeck.toString(), "");
-					if (fromStorage.equalsIgnoreCase("")) 
+					storageWorkoutAsString = context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.FirstDeck.toString(), "");
+					if (storageWorkoutAsString.equalsIgnoreCase("")) 
 					{
-						data = makeWorkoutStringForStorage(deck);
-						context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), data).commit();
+						context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), currentWorkoutAsString).commit();
 					}
 					break;
 				case DateSinceLastDeck: // TODO: implement this
-					fromStorage = context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.DateSinceLastDeck.toString(), "");
-					context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), fromStorage).commit();
+					storageWorkoutAsString = context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.DateSinceLastDeck.toString(), "");
+					context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), storageWorkoutAsString).commit();
 					break;
 				case PreviousDeck:
-					data = makeWorkoutStringForStorage(deck);
-					context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), data).commit();
+					currentWorkoutAsString = makeWorkoutStringForStorage(deck);
+					context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), currentWorkoutAsString).commit();
 					break;
 				case FastestDeck:
-					fromStorage = context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.FastestDeck.toString(), "");
-					data = makeWorkoutStringForStorage(deck);
-					// TODO: compare with previous deck
-					context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), data).commit();
+					storageWorkoutAsString = context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.FastestDeck.toString(), "");
+					
+					CustomDate storageDurationDate = new CustomDate();
+					storageDurationDate.setThisDateToDurationBasedOnString(storageWorkoutAsString);
+					
+					if (storageDurationDate.isNullDuration()) 
+					{
+						context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), currentWorkoutAsString).commit();	
+					} else {
+						CustomDate currentDurationDate = new CustomDate();
+						currentDurationDate.setThisDateToDurationBasedOnString(deck.inGameStats.duration);
+						
+						if (currentDurationDate.before(storageDurationDate))
+						{
+							context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), currentWorkoutAsString).commit();
+						} else {
+							context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), storageWorkoutAsString).commit();
+						}
+					}
+					
 					break;
 				case CumulativePushups:
-					fromStorage = "0" + context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.CumulativePushups.toString(), "");
-					val = Integer.parseInt(fromStorage) + deck.pushups.getCount();
+					storageWorkoutAsString = "0" + context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.CumulativePushups.toString(), "");
+					val = Integer.parseInt(storageWorkoutAsString) + deck.pushups.getCount();
 					context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), val + "").commit();
 					break;
 				case CumulativeSitups:
-					fromStorage = "0" + context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.CumulativeSitups.toString(), "");
-					val = Integer.parseInt(fromStorage) + deck.situps.getCount();
+					storageWorkoutAsString = "0" + context.getSharedPreferences(STORAGE_STATS_DECK1, 0).getString(StatKeys.CumulativeSitups.toString(), "");
+					val = Integer.parseInt(storageWorkoutAsString) + deck.situps.getCount();
 					context.getSharedPreferences(STORAGE_STATS_DECK1, 0).edit().putString(key.toString(), val + "").commit();
 					break;
 				default:
