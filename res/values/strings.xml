@@ -9,5 +9,15 @@
     <string name="start_solo_deck">Play Solo Deck</string>
     <string name="solo_deck_title">Solo Deck</string>
     <string name="done_with_this_card">Done! (get next card)</string>
+    <string name="start_coop_deck">Play with a Buddy</string>
+    <string name="title_activity_workout_with_buddy">WorkoutWithBuddyActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="wwb_chooseAccount">Choose an Account to Login</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_stats">Stats</string>
+    <string name="title_activity_android_storage">AndroidStorageActivity</string>
+    <string name="title_activity_game">Game (solo or duo)</string>
+    <string name="wwb_default_label">Connecting to Server...</string>
 
 </resources>
